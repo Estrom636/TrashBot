@@ -128,28 +128,37 @@ double getRotationsR() {
   return (double)ticks / pulsesPerRevolution;
 }
 
-void moveDistance(double distance){
-  double rotation = distance / CIRCUMFERENCE;
+void moveDistance(double leftDis, double rightDis){
+  double leftRot  = leftDis  / CIRCUMFERENCE;
+  double rightRot = rightDis / CIRCUMFERENCE;
 
-  if(distance > 0){
-    while(rotation > getRotationsL()){
-      //controller
-      //lidar
+  while(getRotationsL() != leftRot || getRotationsR() != rightRot){
+    double leftError  = leftRot  - getRotationsL();
+    double rightError = rightRot - getRotationsR();
 
-      MotorPowL(0.15);
+    //Left Wheel
+    if(abs(leftError) > 0.5){
+      if(leftError > 0){
+        MotorPowL(0.15);
+      }else{
+        MotorPowL(-0.15);
+      }
+    }else{
+      MotorPowL(0);
+    }
+    //Right Wheel
+    if(abs(rightError) > 0.5){
+      if(rightError > 0){
+        MotorPowR(0.15);
+      }else{
+        MotorPowR(-0.15);
+      }
+    }else{
+      MotorPowR(0);
     }
   }
-
-  if(distance < 0){
-    while(rotation < getRotationsL()){
-      //controller
-      //lidar
-
-      MotorPowL(-0.15);
-    }
-  }
-
-  MotorPowL(0.00);
+  MotorPowL(0);
+  MotorPowR(0);
 }
 
 void MotorPowL(double power) {
