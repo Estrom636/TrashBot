@@ -8,8 +8,11 @@ const int encoderAR = 34;
 const int encoderBR = 35;
 
 const float pulsesPerRevolution = 385.4;
-const double DIAMETER = 2.83;
-const double CIRCUMFERENCE = DIAMETER * PI; 
+const double DIAMETERmm = 72;
+const double DIAMETERin = DIAMETERmm/25.4;
+const double CIRCUMFERENCE = DIAMETERin * PI;
+const double TRACKWIDTHmm = 586;
+const double TRACKWIDTHin = TRACKWIDTHmm/25.4;
 
 Servo motorL;
 Servo motorR;
@@ -99,7 +102,8 @@ void loop() {
   rotationsL = currentTicksL / pulsesPerRevolution;
   rotationsR = currentTicksR / pulsesPerRevolution;
 
-  //moveDistance(5);
+  rotateDegrees(180.0);
+  //moveDistance(5, 5);
 
   Serial.print("Left Ticks: ");
   Serial.print(currentTicksL);
@@ -137,28 +141,43 @@ void moveDistance(double leftDis, double rightDis){
     double rightError = rightRot - getRotationsR();
 
     //Left Wheel
-    if(abs(leftError) > 0.5){
+    if(abs(leftError) > 0.01){
       if(leftError > 0){
-        MotorPowL(0.15);
+        MotorPowL(0.2);
       }else{
-        MotorPowL(-0.15);
+        MotorPowL(-0.2);
       }
     }else{
       MotorPowL(0);
     }
+
     //Right Wheel
-    if(abs(rightError) > 0.5){
+    if(abs(rightError) > 0.01){
       if(rightError > 0){
-        MotorPowR(0.15);
+        MotorPowR(0.2);
       }else{
-        MotorPowR(-0.15);
+        MotorPowR(-0.2);
       }
     }else{
       MotorPowR(0);
     }
   }
+
   MotorPowL(0);
   MotorPowR(0);
+}
+
+void rotateDegrees(double degree){
+  if(abs(degree) > 360) degree = 360 * (degree / abs(degree));
+  double inches = (degree / 360) * PI * TRACKWIDTHin;
+  
+  if(degree > 0){
+    //+ Rotation -> Clockwise
+    moveDistance(inches, -1 * inches);
+  }else{
+    //- Rotation -> Counterclockwise
+    moveDistance(-1 * inches, inches);
+  }
 }
 
 void MotorPowL(double power) {
