@@ -28,7 +28,9 @@ Currently uses a [LED Headlight](https://www.gobilda.com/led-headlight-for-ftc-2
 ## **Code**
 All code is writen in Arduino IDE. 
 ### **Drive**
-The basic drive code uses [Bluepad32](https://bluepad32.readthedocs.io/en/latest/) to use a controller for basic driving of the chassis. Has an arm and disarm trigger for saftey. If disarmed the robot will not move.
+The basic drive code uses [Bluepad32](https://bluepad32.readthedocs.io/en/latest/) to use a controller for basic driving of the chassis. Has an arm and disarm trigger for saftey. If disarmed the robot will not move.\
+The 2nd basic drive code is based on the 1st basic drive code but added on the lidar to disarm and slow the robot if it read stuff in range.\
+The encoder test uses the encoders to drive the robot forward and turning.
 
 ### **Lidar**
 The basic lidar code is to test that the lidar works by displaying the distance into the serial monitor. 
