@@ -102,8 +102,8 @@ void loop() {
   rotationsL = currentTicksL / pulsesPerRevolution;
   rotationsR = currentTicksR / pulsesPerRevolution;
 
-  rotateDegrees(180.0);
-  //moveDistance(5, 5);
+  //rotateDegrees(180.0);
+  moveDistance(5, 5);
 
   Serial.print("Left Ticks: ");
   Serial.print(currentTicksL);
@@ -136,31 +136,37 @@ void moveDistance(double leftDis, double rightDis){
   double leftRot  = leftDis  / CIRCUMFERENCE;
   double rightRot = rightDis / CIRCUMFERENCE;
 
-  while(getRotationsL() != leftRot || getRotationsR() != rightRot){
-    double leftError  = leftRot  - getRotationsL();
-    double rightError = rightRot - getRotationsR();
+  double baseSpeed = 0.15;
+  double kSync = 0.08;
+  double tolerance = 0.01;
 
-    //Left Wheel
-    if(abs(leftError) > 0.01){
-      if(leftError > 0){
-        MotorPowL(0.2);
-      }else{
-        MotorPowL(-0.2);
-      }
-    }else{
-      MotorPowL(0);
+  while(true){
+    double leftCurrent  = getRotationsL();
+    double rightCurrent = getRotationsR();
+
+    double leftError  = leftRot  - leftCurrent;
+    double rightError = rightRot - rightCurrent;
+
+    if(abs(leftError) < tolerance && abs(rightError) < tolerance){
+      break;
     }
 
-    //Right Wheel
-    if(abs(rightError) > 0.01){
-      if(rightError > 0){
-        MotorPowR(0.2);
-      }else{
-        MotorPowR(-0.2);
-      }
-    }else{
-      MotorPowR(0);
-    }
+    int leftDir  = direction(leftError);
+    int rightDir = direction(rightError);
+
+    double syncError = leftCurrent - rightCurrent;
+
+    double leftPow  = leftDir  * baseSpeed - (kSync * syncError);
+    double rightPow = rightDir * baseSpeed + (kSync * syncError);
+
+    Serial.print(leftPow, 3);
+    Serial.print(" | ");
+    Serial.println(rightPow, 3);
+
+    MotorPowL(leftPow);
+    MotorPowR(rightPow);
+
+    delay(10);
   }
 
   MotorPowL(0);
@@ -191,4 +197,8 @@ void MotorPowR(double power) {
   if(power < -1) power = -1;
 
   motorR.write(90 + (power * -90));
+}
+
+int direction(double num){
+  return num / abs(num);
 }
