@@ -104,6 +104,9 @@ void loop() {
 
   //rotateDegrees(180.0);
   moveDistance(5, 5);
+  delay(100);
+  moveDistance(-5, -5);
+  delay(100);
 
   Serial.print("Left Ticks: ");
   Serial.print(currentTicksL);
@@ -136,9 +139,9 @@ void moveDistance(double leftDis, double rightDis){
   double leftRot  = leftDis  / CIRCUMFERENCE;
   double rightRot = rightDis / CIRCUMFERENCE;
 
-  double baseSpeed = 0.15;
-  double kSync = 0.08;
-  double tolerance = 0.01;
+  double baseSpeed = 0.175;
+  double kSync = 0.10;
+  double tolerance = 0.05;
 
   while(true){
     double leftCurrent  = getRotationsL();
