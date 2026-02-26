@@ -102,11 +102,10 @@ void loop() {
   rotationsL = currentTicksL / pulsesPerRevolution;
   rotationsR = currentTicksR / pulsesPerRevolution;
 
-  //rotateDegrees(180.0);
-  moveDistance(5, 5);
-  delay(100);
-  moveDistance(-5, -5);
-  delay(100);
+  rotateDegrees(90.0);
+  delay(250);
+  moveDistance(10, 10);
+  delay(250);
 
   Serial.print("Left Ticks: ");
   Serial.print(currentTicksL);
@@ -135,20 +134,32 @@ double getRotationsR() {
   return (double)ticks / pulsesPerRevolution;
 }
 
+void resetEncoders() {
+  noInterrupts();
+  encoderTicksL = 0;
+  encoderTicksR = 0;
+  interrupts();
+}
+
 void moveDistance(double leftDis, double rightDis){
+  resetEncoders();
+
   double leftRot  = leftDis  / CIRCUMFERENCE;
   double rightRot = rightDis / CIRCUMFERENCE;
 
   double baseSpeed = 0.175;
-  double kSync = 0.10;
-  double tolerance = 0.05;
+  double kSync = 0.08;
+  double tolerance = 0.01;
+
+  int rotSet = 1;
+  if(leftRot == -1*rightRot) rotSet = -1;
 
   while(true){
     double leftCurrent  = getRotationsL();
-    double rightCurrent = getRotationsR();
+    double rightCurrent = getRotationsR() * rotSet;
 
     double leftError  = leftRot  - leftCurrent;
-    double rightError = rightRot - rightCurrent;
+    double rightError = (rightRot * rotSet) - rightCurrent;
 
     if(abs(leftError) < tolerance && abs(rightError) < tolerance){
       break;
@@ -164,10 +175,10 @@ void moveDistance(double leftDis, double rightDis){
 
     Serial.print(leftPow, 3);
     Serial.print(" | ");
-    Serial.println(rightPow, 3);
+    Serial.println(rightPow * rotSet, 3);
 
     MotorPowL(leftPow);
-    MotorPowR(rightPow);
+    MotorPowR(rightPow * rotSet);
 
     delay(10);
   }
