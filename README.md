@@ -47,8 +47,8 @@ Ground Rail -> GND
 Right Motor Signal -> GIOP13
 Left Motor Signal -> GIOP12
 Light Signal -> GIOP48
-Motor Left encoderAL -> GIOP36
-Motor Left encoderBL -> GIOP37
+Motor Left encoderAL -> GIOP37
+Motor Left encoderBL -> GIOP36
 Motor Right encoderAR -> GIOP38
 Motor Right encoderBR -> GIOP35
 Lidar Pin -> GIOP05
