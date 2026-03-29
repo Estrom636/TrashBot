@@ -44,12 +44,12 @@ _No camera yet_
 ```
 Power Rail -> 5V
 Ground Rail -> GND
-Right Motor Signal -> GIOP27
-Left Motor Signal -> GIOP26
-Light Signal -> GIOP33
+Right Motor Signal -> GIOP13
+Left Motor Signal -> GIOP12
+Light Signal -> GIOP48
 Motor Left encoderAL -> GIOP36
-Motor Left encoderBL -> GIOP39
-Motor Right encoderAL -> GIOP34
+Motor Left encoderBL -> GIOP37
+Motor Right encoderAL -> GIOP38
 Motor Right encoderBL -> GIOP35
 Lidar Pin -> GIOP05
 Lidar PWM Pin -> GIOP18
