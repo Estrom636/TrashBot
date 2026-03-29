@@ -49,8 +49,8 @@ Left Motor Signal -> GIOP12
 Light Signal -> GIOP48
 Motor Left encoderAL -> GIOP36
 Motor Left encoderBL -> GIOP37
-Motor Right encoderAL -> GIOP38
-Motor Right encoderBL -> GIOP35
+Motor Right encoderAR -> GIOP38
+Motor Right encoderBR -> GIOP35
 Lidar Pin -> GIOP05
 Lidar PWM Pin -> GIOP18
 ```
